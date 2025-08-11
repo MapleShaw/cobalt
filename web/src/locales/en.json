@@ -1,0 +1,267 @@
+{
+  "seo": {
+    "title": "SnapMedia - Cross-Platform Media Downloader | Supports 15+ platforms including YouTube, TikTok, Instagram",
+    "description": "SnapMedia is a free, cross-platform media downloader that supports video and audio downloads from 15+ popular platforms like YouTube, TikTok, Instagram, Twitter, and Bilibili. Fast, secure, and without watermarks."
+  },
+  "header": {
+    "title": "Cross-Platform Media Downloader",
+    "subtitle": "Get your favorite content with one click",
+    "subtitle_highlight": "Fast • Secure • Multi-Platform Support"
+  },
+  "settings": "Settings",
+  "supported_platforms": "Supported Platforms",
+  "footer": {
+    "tagline": "Media in a Snap!",
+    "built_with_pre": "Built on the open-source project ",
+    "built_with_post": ""
+  },
+  "queue": {
+    "title": "Processing Queue",
+    "clear": "Clear",
+    "source": "Source: {service}",
+    "unknown_platform": "Unknown Platform",
+    "media_file": "{service} Media File",
+    "analyzing_link": "Analyzing link...",
+    "detected_separate_streams": "Detected {service} separate streams, preparing for front-end merge...",
+    "stream_url_fetch_failed": "Failed to get audio and video stream URLs",
+    "downloading_video_stream": "Downloading video stream...",
+    "downloading_audio_stream": "Downloading audio stream...",
+    "stream_download_failed": "Audio/video stream download failed - Video: {video_status}, Audio: {audio_status}",
+    "processing_video_data": "Processing video data...",
+    "processing_audio_data": "Processing audio data...",
+    "data_processing_complete": "Data processing complete, preparing to merge...",
+    "initializing_video_engine": "Initializing video processing engine...",
+    "merge_complete_preparing_download": "Merge complete, preparing to download...",
+    "starting_download": "Starting download...",
+    "download_complete": "Download complete!",
+    "merge_failed_downloading_separately": "Merge failed, downloading video and audio separately...",
+    "downloading_video_file": "Downloading video file...",
+    "downloading_audio_file": "Downloading audio file...",
+    "downloaded_separately": "Video and audio files have been downloaded separately",
+    "stream_download_failed_error": "Download failed: unable to get audio/video files",
+    "downloading_multiple_files": "Downloading multiple files...",
+    "downloading_file_number": "Downloading file {index}/{total}...",
+    "download_stream_failed": "Failed to download stream {index}",
+    "all_files_downloaded": "All files downloaded!",
+    "downloading_file": "Downloading file...",
+    "file_download_failed": "File download failed",
+    "processing_file_data": "Processing file data...",
+    "no_downloadable_links": "No available download links",
+    "processing_failed": "Processing failed: ",
+    "unknown_error": "Unknown error",
+    "waiting_for_processing": "Waiting for processing..."
+  },
+  "preview": {
+    "title": "Video Preview",
+    "unknown_title": "Unknown Title",
+    "unknown_author": "Unknown Author",
+    "quality": "Quality",
+    "unknown": "Unknown",
+    "format": "Format",
+    "unsupported_video": "Your browser does not support video playback",
+    "proxy_video_failed": "Proxy video preview failed",
+    "preview_unavailable": "Video preview unavailable",
+    "proxy_video_unavailable_desc": "SnapMedia proxy may require special handling",
+    "preview_unavailable_desc": "Some platform videos need to be downloaded directly",
+    "download_instead": "Click the button below to download directly",
+    "loading_proxy": "🔄 Loading via SnapMedia proxy...",
+    "loading_video": "🎬 Loading video...",
+    "file_info": "File Information",
+    "merge_info": "YouTube video downloads contain two separate files:",
+    "video_file": "Video file",
+    "video_file_desc": " (no audio) - used for the preview above",
+    "audio_file": "Audio file",
+    "audio_file_desc": " (no video)",
+    "merge_required": "You need to merge these two files using video editing software.",
+    "single_file_detected": "Single media file detected, click to download and save.",
+    "single_file_desc": "This is a complete media file and requires no extra processing.",
+    "multiple_files_detected": "Multiple files detected, will be downloaded separately.",
+    "file_count": "File count",
+    "downloading": "Downloading...",
+    "download_separated_files": "Download separated files (video + audio)",
+    "download_file": "Download file",
+    "download_all_files": "Download all files ({count})",
+    "open_in_new_tab": "Open in new tab"
+  },
+  "picker": {
+    "title": "Select files to download",
+    "found_files": "Found {count} files",
+    "select_all": "Select All",
+    "deselect_all": "Deselect All",
+    "selected_files": "Selected {selected} / {total} files",
+    "video": "Video",
+    "image": "Image",
+    "downloading": "Downloading...",
+    "download_selected": "Download Selected ({count})"
+  },
+  "toast": {
+    "download_preparing": "Preparing to download...",
+    "no_downloadable_links": "No downloadable links found",
+    "download_started_multiple": "✅ Download started, {count} files in total",
+    "download_error_unknown": "Unknown error during download",
+    "opened_in_new_tab": "Video opened in new tab",
+    "batch_download_started": "Starting batch download, {count} files in total",
+    "download_failed": "Download failed",
+    "download_file_failed": "Failed to download file {index}: {message}",
+    "batch_download_all_started": "✅ All batch download tasks have been started",
+    "download_failed_with_message": "Download failed: {message}",
+    "browser_downloading_streams": "🚀 Browser smart processing: downloading audio and video streams...",
+    "browser_parsing_streams": "📦 Browser smart processing: parsing audio and video data...",
+    "browser_merging_streams": "🎬 Browser smart merging: processing {service} audio and video...",
+    "initializing_video_engine": "Initializing video processing engine...",
+    "browser_merge_complete": "✨ Browser merge complete! Preparing to download...",
+    "browser_merge_failed_downloading_separately": "⚠️ Browser merge failed, will download video and audio separately",
+    "downloaded_separately": "✅ Video and audio files have been downloaded separately",
+    "stream_download_failed_error": "❌ Audio and video file download failed",
+    "queue_processing_failed": "Queue processing failed"
+  },
+  "download_interface": {
+    "paste_link_placeholder": "Paste video link...",
+    "download_button": {
+      "processing": "Processing...",
+      "enter_link": "Please enter a link",
+      "invalid_link": "Invalid link",
+      "ready_to_download": "Ready to download",
+      "start_download": "Start download"
+    },
+    "download_modes": {
+      "auto": "Auto",
+      "audio": "Audio",
+      "mute": "Mute"
+    },
+    "advanced_settings": "Advanced Settings",
+    "advanced": {
+      "video_quality": "Video Quality",
+      "video_quality_options": {
+        "max": "Highest"
+      },
+      "audio_format": "Audio Format",
+      "audio_format_options": {
+        "best": "Best"
+      },
+      "filename_style": "Filename Style",
+      "filename_style_options": {
+        "classic": "Classic (full info)",
+        "basic": "Basic (title_quality)",
+        "pretty": "Pretty (title only)",
+        "nerdy": "Nerdy (detailed info)"
+      },
+      "disable_metadata": "Disable Metadata",
+      "convert_gif_to_mp4": "Convert GIF to MP4"
+    },
+    "toast": {
+      "processing_request": "Processing request...",
+      "api_no_response": "API server no response",
+      "added_to_queue": "Added to processing queue, preparing to download...",
+      "redirect_detected": "Detected direct link, showing preview",
+      "tunnel_detected": "Detected single file download, showing preview",
+      "picker_detected": "Found multiple files, please select to download",
+      "generic_success": "Detected media file, showing preview"
+    },
+    "error_messages": {
+      "link_invalid": "Invalid or unsupported link",
+      "link_unsupported": "Unsupported platform",
+      "content_too_long": "Video duration exceeds limit",
+      "content_unavailable": "Content unavailable or deleted",
+      "rate_limit": "Request too frequent, please try again later",
+      "api_fetch_timeout": "Request timeout, please check network connection",
+      "api_fetch_error": "Network error, please try again later",
+      "api_fetch_fail": "This platform is temporarily blocked, please try again later",
+      "api_fetch_status": "API server error",
+      "error_api_header_accept": "API request format error",
+      "error_api_fetch_short_link": "Facebook short links are not supported, please use the full Facebook link",
+      "unknown_error": "API error: {code} - {context}",
+      "unknown_error_context": "Failed to get video info, please check if the link is correct",
+      "unknown_response_format": "Unknown response format: {response}",
+      "download_failed_retry": "Download failed, please try again"
+    }
+  },
+  "settings_panel": {
+    "title": "Settings",
+    "download_settings": {
+      "title": "Download Settings",
+      "default_download_mode": "Default Download Mode",
+      "default_video_quality": "Default Video Quality",
+      "default_audio_format": "Default Audio Format",
+      "media_processing_mode": "Media Processing Mode",
+      "media_processing_mode_options": {
+        "auto": "Smart Select (Recommended)",
+        "forced": "Always Browser Merge",
+        "disabled": "Always Server Merge",
+        "preferred": "Smart Hybrid Mode"
+      },
+      "media_processing_mode_description_html": "🎯 <strong>Smart Select</strong>: YouTube, Bilibili use browser merge, other platforms use server merge<br>🔧 <strong>Browser Merge</strong>: All platforms synthesize video and audio in the browser (fast, uses memory)<br>🌐 <strong>Server Merge</strong>: All platforms synthesize on the server side (saves memory, may be slower)<br>⚡ <strong>Hybrid Mode</strong>: Smartly selects processing method based on file type",
+      "always_proxy": "Always Use Proxy",
+      "always_proxy_title": "When enabled, all downloads will be proxied through the server, which can solve some regional restriction issues, but the download speed may be slower",
+      "youtube_better_audio": "YouTube Better Audio",
+      "proxy_description_html": "💡 <strong>Proxy Settings Description:</strong><br>• 🚀 <strong>Direct Mode</strong> (default): Download directly from the source, fastest speed<br>• 🛡️ <strong>Proxy Mode</strong>: Transfer through the server, can bypass anti-hotlinking and regional restrictions, but slower<br>• 📋 <strong>Usage Scenario</strong>: Enable proxy when download fails, regional restrictions, or anti-hotlinking prevents download"
+    },
+    "interface_settings": {
+      "title": "Interface Settings",
+      "theme": "Theme",
+      "theme_options": {
+        "dark": "Dark",
+        "light": "Light",
+        "auto": "Follow System"
+      },
+      "language": "Language",
+      "neon_intensity": "Neon Effect Intensity",
+      "enable_animations": "Enable Animations"
+    },
+    "api_settings": {
+      "title": "API Settings",
+      "use_custom_api_server": "Use Custom API Server",
+      "api_server_address": "API Server Address",
+      "default_api_server_address": "Default: http://localhost:9000/",
+      "request_timeout": "Request Timeout (seconds)"
+    },
+    "other_settings": {
+      "title": "Other Settings",
+      "auto_detect_clipboard": "Auto-detect clipboard links",
+      "show_dev_info": "Show Developer Info"
+    },
+    "data_management": {
+      "title": "Data Management",
+      "export_settings": "Export Settings",
+      "import_settings": "Import Settings",
+      "reset_settings": "Reset Settings",
+      "import_error": "Import failed: incorrect file format",
+      "reset_confirm": "Are you sure you want to reset all settings? This will clear all custom configurations."
+    },
+    "status": {
+      "saving": "Saving...",
+      "saved": "Saved",
+      "error": "Save failed"
+    }
+  },
+  "hello_world": {
+    "message_1": "You’ve successfully created a project with",
+    "message_2": "What's next?"
+  },
+  "welcome": {
+    "documentation": {
+      "heading": "Documentation",
+      "body_html": "Vue’s <a href=\"https://vuejs.org/\" target=\"_blank\" rel=\"noopener\">official documentation</a> provides you with all information you need to get started."
+    },
+    "tooling": {
+      "heading": "Tooling",
+      "body_html_1": "This project is served and bundled with <a href=\"https://vite.dev/guide/features.html\" target=\"_blank\" rel=\"noopener\">Vite</a>. The recommended IDE setup is <a href=\"https://code.visualstudio.com/\" target=\"_blank\" rel=\"noopener\">VSCode</a> + <a href=\"https://github.com/vuejs/language-tools\" target=\"_blank\" rel=\"noopener\">Vue - Official</a>. If you need to test your components and web pages, check out <a href=\"https://vitest.dev/\" target=\"_blank\" rel=\"noopener\">Vitest</a> and <a href=\"https://www.cypress.io/\" target=\"_blank\" rel=\"noopener\">Cypress</a> / <a href=\"https://playwright.dev/\" target=\"_blank\" rel=\"noopener\">Playwright</a>.",
+      "body_html_2": "More instructions are available in <code>README.md</code>."
+    },
+    "ecosystem": {
+      "heading": "Ecosystem",
+      "body_html": "Get official tools and libraries for your project: <a href=\"https://pinia.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Pinia</a>, <a href=\"https://router.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Vue Router</a>, <a href=\"https://test-utils.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Vue Test Utils</a>, and <a href=\"https://github.com/vuejs/devtools\" target=\"_blank\" rel=\"noopener\">Vue Dev Tools</a>. If you need more resources, we suggest paying <a href=\"https://github.com/vuejs/awesome-vue\" target=\"_blank\" rel=\"noopener\">Awesome Vue</a> a visit."
+    },
+    "community": {
+      "heading": "Community",
+      "body_html": "Got stuck? Ask your question on <a href=\"https://chat.vuejs.org\" target=\"_blank\" rel=\"noopener\">Vue Land</a> (our official Discord server), or <a href=\"https://stackoverflow.com/questions/tagged/vue.js\" target=\"_blank\" rel=\"noopener\">StackOverflow</a>. You should also follow the official <a href=\"https://bsky.app/profile/vuejs.org\" target=\"_blank\" rel=\"noopener\">@vuejs.org</a> Bluesky account or the <a href=\"https://x.com/vuejs\" target=\"_blank\" rel=\"noopener\">@vuejs</a> X account for latest news in the Vue world."
+    },
+    "support": {
+      "heading": "Support Vue",
+      "body_html": "As an independent project, Vue relies on community backing for its sustainability. You can help us by <a href=\"https://vuejs.org/sponsor/\" target=\"_blank\" rel=\"noopener\">becoming a sponsor</a>."
+    }
+  },
+  "about": {
+    "title": "This is an about page"
+  }
+}
