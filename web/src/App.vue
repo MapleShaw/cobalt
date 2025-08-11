@@ -7,14 +7,22 @@ import Toast from '@/components/Toast.vue'
 import { loadSettings, initializeAPI } from '@/stores/settings'
 import type { CobaltResponse, QueuedItem } from '@/types';
 import { remux } from './lib/remuxer';
+import { useI18n } from 'vue-i18n'
 import { useSeo } from '@/composables/useSeo'
 
+const { t, locale } = useI18n()
+
 // SEO 和 Analytics 设置
-const { trackEvent, trackPageView } = useSeo({
-  title: 'SnapMedia - 跨平台媒体下载工具 | 支持YouTube、TikTok、Instagram等15+平台',
-  description: 'SnapMedia是一款免费的跨平台媒体下载工具，支持YouTube、TikTok、Instagram、Twitter、Bilibili等15+热门平台的视频、音频下载。快速、安全、无水印。',
+const { trackEvent, trackPageView, setSeo } = useSeo({
   canonical: 'https://www.snapmedia.app/'
 })
+
+watch(locale, () => {
+  setSeo({
+    title: t('seo.title'),
+    description: t('seo.description')
+  })
+}, { immediate: true })
 
 // 响应式状态
 const showSettings = ref(false)
@@ -96,11 +104,11 @@ const handleVideoError = () => {
     if (!previewData.value) return;
 
     isDownloading.value = true;
-    showToast('正在准备下载...', 'info');
+    showToast(t('toast.download_preparing'), 'info');
 
     const urls = previewData.value.tunnel || [];
     if (urls.length === 0) {
-      showToast('没有找到可下载的链接', 'error');
+      showToast(t('toast.no_downloadable_links'), 'error');
       isDownloading.value = false;
       return;
     }
@@ -109,7 +117,7 @@ const handleVideoError = () => {
       for (let i = 0; i < urls.length; i++) {
         const url = urls[i];
         const isTunnel = url.includes('/tunnel?');
-        const fileType = i === 0 ? '视频' : '音频';
+        const fileType = i === 0 ? t('preview.video_file') : t('preview.audio_file');
         const ext = i === 0 ? (previewData.value.filenameAttributes?.extension || 'mp4') : 'mp3';
         const title = previewData.value.filenameAttributes?.title || 'media';
         const filename = urls.length > 1 ? `${title}_${fileType}.${ext}` : `${title}.${ext}`;
@@ -120,7 +128,7 @@ const handleVideoError = () => {
           // 对于服务器代理的链接，必须使用fetch+blob下载
           console.log(`Tunnel链接 detected, using fetch+blob for ${filename}`);
           const response = await fetch(url);
-          if (!response.ok) throw new Error(`下载失败: ${response.status} ${response.statusText}`);
+          if (!response.ok) throw new Error(`${t('toast.download_failed')}: ${response.status} ${response.statusText}`);
           const blob = await response.blob();
           const blobUrl = URL.createObjectURL(blob);
 
@@ -147,12 +155,12 @@ const handleVideoError = () => {
         }
       }
 
-      showToast(`✅ 下载已启动，共 ${urls.length} 个文件`, 'success');
+      showToast(t('toast.download_started_multiple', { count: urls.length }), 'success');
       closePreview();
 
     } catch (error) {
       console.error('❌ 下载失败:', error);
-      showToast(error instanceof Error ? error.message : '下载过程中发生未知错误', 'error');
+      showToast(error instanceof Error ? error.message : t('toast.download_error_unknown'), 'error');
     } finally {
       isDownloading.value = false;
     }
@@ -167,7 +175,7 @@ const openInNewTab = () => {
   
   window.open(url, '_blank', 'noopener,noreferrer')
   
-  showToast('已在新标签页打开视频', 'info')
+  showToast(t('toast.opened_in_new_tab'), 'info')
 }
 
 // Picker弹窗管理
@@ -214,7 +222,7 @@ const toggleSelectAll = () => {
     const selectedItemsData = selectedIndexes.map(index => pickerData.value.picker[index]);
 
     try {
-      showToast(`开始批量下载，共${selectedItemsData.length}个文件`, 'info')
+      showToast(t('toast.batch_download_started', { count: selectedItemsData.length }), 'info')
       
       for (let i = 0; i < selectedItemsData.length; i++) {
         const item = selectedItemsData[i]
@@ -274,18 +282,18 @@ const toggleSelectAll = () => {
           
         } catch (error) {
           console.error(`❌ 下载文件 ${i + 1} 失败:`, error)
-          const errorMessage = error instanceof Error ? error.message : '下载失败'
-          showToast(`下载文件 ${i + 1} 失败: ${errorMessage}`, 'error')
+          const errorMessage = error instanceof Error ? error.message : t('toast.download_failed')
+          showToast(t('toast.download_file_failed', { index: i + 1, message: errorMessage }), 'error')
         }
       }
       
-      showToast(`✅ 批量下载任务已全部启动`, 'success')
+      showToast(t('toast.batch_download_all_started'), 'success')
       closePicker()
       
     } catch (error) {
       console.error('❌ 批量下载过程出错:', error)
-      const errorMessage = error instanceof Error ? error.message : '下载失败'
-      showToast(`下载失败: ${errorMessage}`, 'error')
+      const errorMessage = error instanceof Error ? error.message : t('toast.download_failed')
+      showToast(t('toast.download_failed_with_message', { message: errorMessage }), 'error')
     } finally {
       isPickerDownloading.value = false
     }
@@ -307,7 +315,7 @@ function downloadFile(blob: Blob, filename: string) {
 async function processQueueItem(item: QueuedItem) {
   try {
     item.status = 'processing';
-    item.currentStep = '正在分析链接...';
+    item.currentStep = t('queue.analyzing_link');
     
     console.log('🚀 开始处理队列项目:', {
       service: (item.response as any).service,
@@ -336,7 +344,7 @@ async function processQueueItem(item: QueuedItem) {
           // 前端智能合并：检测到双流就合并
       if (shouldRemux) {
       console.log(`🎬 检测到${service}双流，开始前端合并...`);
-      item.currentStep = `检测到${service}分离流，准备前端合并...`;
+      item.currentStep = t('queue.detected_separate_streams', { service });
       
       const tunnelArray = (item.response as any).tunnel;
       const [videoUrl, audioUrl] = tunnelArray;
@@ -350,12 +358,12 @@ async function processQueueItem(item: QueuedItem) {
       });
       
       if (!videoUrl || !audioUrl) {
-        throw new Error('音视频流URL获取失败');
+        throw new Error(t('queue.stream_url_fetch_failed'));
       }
       
-      showToast('🚀 浏览器智能处理：正在下载音视频流...', 'info');
+      showToast(t('toast.browser_downloading_streams'), 'info');
       
-      item.currentStep = '正在下载视频流...';
+      item.currentStep = t('queue.downloading_video_stream');
       console.log('📥 开始下载视频流...', {
         url: videoUrl?.substring(0, 150) + '...',
         urlLength: videoUrl?.length
@@ -387,7 +395,7 @@ async function processQueueItem(item: QueuedItem) {
       
       const videoResp = await fetch(videoUrl, videoIsProxy ? fetchOptions : undefined);
       
-      item.currentStep = '正在下载音频流...';
+      item.currentStep = t('queue.downloading_audio_stream');
       console.log('📥 开始下载音频流...');
       const audioResp = await fetch(audioUrl, audioIsProxy ? fetchOptions : undefined);
       
@@ -417,22 +425,22 @@ async function processQueueItem(item: QueuedItem) {
             url: audioUrl?.substring(0, 100) + '...'
           } : null
         });
-        throw new Error(`音视频流下载失败 - Video: ${videoResp.status}, Audio: ${audioResp.status}`);
+        throw new Error(t('queue.stream_download_failed', { video_status: videoResp.status, audio_status: audioResp.status }));
       }
       
-      item.currentStep = '正在处理视频数据...';
+      item.currentStep = t('queue.processing_video_data');
       console.log('📦 转换为Blob对象...');
-      showToast('📦 浏览器智能处理：正在解析音视频数据...', 'info');
+      showToast(t('toast.browser_parsing_streams'), 'info');
       
       // 分步处理，避免UI阻塞
       console.log('📦 处理视频流...');
       const videoBlob = await videoResp.blob();
       
-      item.currentStep = '正在处理音频数据...';
+      item.currentStep = t('queue.processing_audio_data');
       console.log('📦 处理音频流...');  
       const audioBlob = await audioResp.blob();
       
-      item.currentStep = '数据处理完成，准备合并...';
+      item.currentStep = t('queue.data_processing_complete');
       console.log('✅ 流数据处理完成');
       
       console.log('📊 Blob信息:', {
@@ -443,99 +451,99 @@ async function processQueueItem(item: QueuedItem) {
       });
       
       console.log('📥 视频和音频流下载完成，开始合并...');
-      showToast(`🎬 浏览器智能合并：正在处理${service}音视频...`, 'info');
+      showToast(t('toast.browser_merging_streams', { service }), 'info');
       
-      item.currentStep = '正在初始化视频处理引擎...';
+      item.currentStep = t('queue.initializing_video_engine');
       console.log('🔄 调用remux函数...');
-      showToast('正在初始化视频处理引擎...', 'info');
+      showToast(t('toast.initializing_video_engine'), 'info');
       try {
         const mergedBlob = await remux(videoBlob, audioBlob, (step: string) => {
           item.currentStep = step; // remux函数中会传递步骤信息
         });
         
-        item.currentStep = '合并完成，准备下载...';
+        item.currentStep = t('queue.merge_complete_preparing_download');
         console.log('✅ remux合并完成，文件大小:', (mergedBlob.size / 1024 / 1024).toFixed(2) + 'MB');
-        showToast('✨ 浏览器合并完成！准备下载...', 'success');
+        showToast(t('toast.browser_merge_complete'), 'success');
         
         const filename = item.response.filename || `${service}_merged.mp4`;
         
-        item.currentStep = '正在启动下载...';
+        item.currentStep = t('queue.starting_download');
         console.log(`✅ ${service}视频合并完成，开始下载:`, filename);
         downloadFile(mergedBlob, filename);
         
         item.status = 'done';
-        item.currentStep = '下载完成！';
+        item.currentStep = t('queue.download_complete');
         console.log(`🎉 ${service}视频处理完全完成！`);
       } catch (remuxError) {
         console.error('❌ 浏览器合并失败，启用降级方案:', remuxError);
         
         if (videoBlob.size > 0 && audioBlob.size > 0) {
           // 如果文件下载成功但合并失败，分别下载
-          showToast('⚠️ 浏览器合并失败，将分别下载视频和音频', 'warning');
+          showToast(t('toast.browser_merge_failed_downloading_separately'), 'warning');
           
-          item.currentStep = '合并失败，正在分别下载视频和音频...';
+          item.currentStep = t('queue.merge_failed_downloading_separately');
           console.log('🔄 启用降级方案：分别下载视频和音频文件');
           
           const baseFilename = item.response.filename?.replace(/\.[^/.]+$/, '') || `${service}_video`;
           
           // 下载视频文件
-          item.currentStep = '正在下载视频文件...';
+          item.currentStep = t('queue.downloading_video_file');
           downloadFile(videoBlob, `${baseFilename}_video.mp4`);
           
           // 下载音频文件  
-          item.currentStep = '正在下载音频文件...';
+          item.currentStep = t('queue.downloading_audio_file');
           downloadFile(audioBlob, `${baseFilename}_audio.m4a`);
           
           item.status = 'done';
-          item.currentStep = '已分别下载视频和音频文件';
-          showToast('✅ 已分别下载视频和音频文件', 'success');
+          item.currentStep = t('queue.downloaded_separately');
+          showToast(t('toast.downloaded_separately'), 'success');
           console.log(`🎉 ${service}视频降级下载完成！`);
           
         } else {
           // 文件下载就失败了
-          showToast('❌ 音视频文件下载失败', 'error');
+          showToast(t('toast.stream_download_failed_error'), 'error');
           item.status = 'error';
-          item.currentStep = '下载失败：无法获取音视频文件';
+          item.currentStep = t('queue.stream_download_failed_error');
         }
       }
       
     } else if ((item.response as any).tunnel && Array.isArray((item.response as any).tunnel)) {
       // 处理其他多流情况（非双流的多个文件）
       console.log('🎵 检测到多流响应，分别下载所有流...');
-      item.currentStep = '正在下载多个文件...';
+      item.currentStep = t('queue.downloading_multiple_files');
       const tunnelUrls = (item.response as any).tunnel;
       
       for (let i = 0; i < tunnelUrls.length; i++) {
-        item.currentStep = `正在下载第 ${i+1}/${tunnelUrls.length} 个文件...`;
+        item.currentStep = t('queue.downloading_file_number', { index: i + 1, total: tunnelUrls.length });
         const url = tunnelUrls[i];
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`下载流 ${i+1} 失败`);
+        if (!response.ok) throw new Error(t('queue.download_stream_failed', { index: i + 1 }));
         const blob = await response.blob();
         const filename = `${item.response.filename || 'media'}_${i+1}.${i === 0 ? 'mp4' : 'mp3'}`;
         downloadFile(blob, filename);
       }
       
       item.status = 'done';
-      item.currentStep = '所有文件下载完成！';
+      item.currentStep = t('queue.all_files_downloaded');
       
     } else if (item.response.url) {
       // 处理单文件下载
       console.log('📁 检测到单文件下载...');
-      item.currentStep = '正在下载文件...';
+      item.currentStep = t('queue.downloading_file');
       const response = await fetch(item.response.url);
-      if (!response.ok) throw new Error('文件下载失败');
+      if (!response.ok) throw new Error(t('queue.file_download_failed'));
       
-      item.currentStep = '正在处理文件数据...';
+      item.currentStep = t('queue.processing_file_data');
       const blob = await response.blob();
       const filename = item.response.filename || 'download';
       
-      item.currentStep = '正在启动下载...';
+      item.currentStep = t('queue.starting_download');
       downloadFile(blob, filename);
       item.status = 'done';
-      item.currentStep = '下载完成！';
+      item.currentStep = t('queue.download_complete');
       
     } else {
-      throw new Error('无可用下载链接');
+      throw new Error(t('queue.no_downloadable_links'));
     }
     
     console.log('✅ 队列项目处理完成');
@@ -543,8 +551,8 @@ async function processQueueItem(item: QueuedItem) {
   } catch (error) {
     console.error('❌ 队列项目处理失败:', error);
     item.status = 'error';
-    item.currentStep = '处理失败：' + (error instanceof Error ? error.message : '未知错误');
-    showToast(error instanceof Error ? error.message : '队列处理失败', 'error');
+    item.currentStep = t('queue.processing_failed') + (error instanceof Error ? error.message : t('queue.unknown_error'));
+    showToast(error instanceof Error ? error.message : t('toast.queue_processing_failed'), 'error');
   }
 }
 
@@ -635,7 +643,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
     
     // 如果仍然没有文件名，使用服务名称和时间戳
     if (!enhancedFilename || enhancedFilename.trim() === '') {
-      const service = response.service || '媒体';
+      const service = response.service || t('queue.unknown_platform');
       const timestamp = new Date().toISOString().slice(0, 16).replace(/[-:]/g, '');
       enhancedFilename = `${service}_${timestamp}`;
     }
@@ -748,21 +756,21 @@ function addToQueue({ response, request }: { response: any, request: any }) {
                  hover:bg-slate-700/50 transition-colors text-slate-300 hover:text-white z-20"
         >
           <Settings class="w-4 h-4 sm:w-5 sm:h-5" />
-          <span class="hidden sm:inline text-sm sm:text-base">设置</span>
+          <span class="hidden sm:inline text-sm sm:text-base">{{ $t('settings') }}</span>
         </button>
         
         <!-- 主标题区域 - 居中，增加顶部间距 -->
         <div class="max-w-4xl mx-auto pt-24 text-center px-4">
           <!-- 主标题 -->
           <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-pink-200 to-pink-300 bg-clip-text text-transparent">
-            跨平台媒体下载工具
+            {{ $t('header.title') }}
           </h1>
 
           <!-- 副口号 -->
           <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-6">
-            一键获取你喜爱的内容
+            {{ $t('header.subtitle') }}
             <br>
-            <span class="text-sm sm:text-base text-slate-400 font-medium">快速 • 安全 • 多平台支持</span>
+            <span class="text-sm sm:text-base text-slate-400 font-medium">{{ $t('header.subtitle_highlight') }}</span>
           </p>
         </div>
       </header>
@@ -794,7 +802,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
               <!-- 默认显示的标签 -->
               <div class="flex items-center space-x-2 px-4 py-2 bg-slate-800/50 border border-white/10 rounded-full 
                           hover:bg-slate-700/50 transition-all duration-300 group-hover:border-pink-400/30">
-                <span class="text-sm text-slate-300 group-hover:text-white">支持的平台</span>
+                <span class="text-sm text-slate-300 group-hover:text-white">{{ $t('supported_platforms') }}</span>
                 <span class="text-xs text-pink-400 font-medium">{{ supportedPlatforms.length }}+</span>
                 <svg class="w-4 h-4 text-slate-400 group-hover:text-pink-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -809,7 +817,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
                        animate-fade-in"
               >
                 <div class="text-center mb-3">
-                  <h4 class="text-white font-semibold text-sm">支持的平台</h4>
+                  <h4 class="text-white font-semibold text-sm">{{ $t('supported_platforms') }}</h4>
                 </div>
                 <div class="flex flex-wrap gap-2 justify-center">
                   <span 
@@ -834,10 +842,10 @@ function addToQueue({ response, request }: { response: any, request: any }) {
           <div class="text-sm text-slate-400 space-y-1">
             <div>
               <span class="text-white font-medium">SnapMedia</span> 
-              <span> - Media in a Snap!</span>
+              <span> - {{ $t('footer.tagline') }}</span>
             </div>
             <div>
-              <span>基于开源项目 </span>
+              <span>{{ $t('footer.built_with_pre') }}</span>
               <a 
                                     href="https://github.com/imputnet/cobalt" 
                 target="_blank" 
@@ -846,7 +854,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
               >
               Cobalt
               </a>
-              <span> 构建</span>
+              <span>{{ $t('footer.built_with_post') }}</span>
             </div>
           </div>
         </div>
@@ -878,13 +886,13 @@ function addToQueue({ response, request }: { response: any, request: any }) {
     >
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-lg font-bold text-white">
-          处理队列 <span class="text-xs align-top bg-blue-500/80 text-white px-1.5 py-0.5 rounded-full">BETA</span>
+          {{ $t('queue.title') }} <span class="text-xs align-top bg-blue-500/80 text-white px-1.5 py-0.5 rounded-full">BETA</span>
         </h3>
         <button
           @click="processingQueue = []"
           class="text-red-400 hover:text-red-300 transition-colors text-sm flex items-center gap-1"
         >
-          <X class="w-4 h-4" /> 清除
+          <X class="w-4 h-4" /> {{ $t('queue.clear') }}
         </button>
       </div>
       <div class="space-y-3 max-h-64 overflow-y-auto pr-2">
@@ -893,10 +901,10 @@ function addToQueue({ response, request }: { response: any, request: any }) {
           <div class="flex items-center justify-between mb-2">
             <p 
               class="text-sm text-white truncate font-medium flex-1 cursor-help" 
-              :title="item.response.filename || `来源：${(item.response as any).service || '未知平台'}`"
+              :title="item.response.filename || $t('queue.source', { service: (item.response as any).service || $t('queue.unknown_platform') })"
               :class="{ 'text-gray-400': !item.response.filename }"
             >
-              {{ item.response.filename || `${(item.response as any).service || '未知平台'} 媒体文件` }}
+              {{ item.response.filename || $t('queue.media_file', { service: (item.response as any).service || $t('queue.unknown_platform') }) }}
             </p>
             <!-- 状态图标 -->
             <div class="flex-shrink-0 ml-2">
@@ -926,7 +934,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
               'text-red-300': item.status === 'error',
               'text-slate-400': item.status === 'queued'
             }">
-              {{ item.currentStep || (item.status === 'queued' ? '等待处理...' : item.status + '...') }}
+              {{ item.currentStep || (item.status === 'queued' ? $t('queue.waiting_for_processing') : item.status + '...') }}
             </p>
           </div>
         </div>
@@ -941,7 +949,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
     >
       <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 m-4">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-bold text-white">视频预览</h3>
+          <h3 class="text-xl font-bold text-white">{{ $t('preview.title') }}</h3>
           <button
             @click="closePreview"
             class="p-2 rounded-lg hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
@@ -954,14 +962,14 @@ function addToQueue({ response, request }: { response: any, request: any }) {
           <!-- 视频信息 -->
           <div v-if="previewData" class="text-center">
             <h4 class="text-lg font-semibold text-white mb-2">
-              {{ previewData.filenameAttributes?.title || '未知标题' }}
+              {{ previewData.filenameAttributes?.title || $t('preview.unknown_title') }}
             </h4>
             <p class="text-gray-400 text-sm">
-              {{ previewData.filenameAttributes?.author || '未知作者' }}
+              {{ previewData.filenameAttributes?.author || $t('preview.unknown_author') }}
             </p>
             <p class="text-gray-400 text-sm mt-2">
-              质量: {{ previewData.filenameAttributes?.qualityLabel || '未知' }} | 
-              格式: {{ previewData.filenameAttributes?.youtubeFormat || '未知' }}
+              {{ $t('preview.quality') }}: {{ previewData.filenameAttributes?.qualityLabel || $t('preview.unknown') }} |
+              {{ $t('preview.format') }}: {{ previewData.filenameAttributes?.youtubeFormat || $t('preview.unknown') }}
             </p>
           </div>
 
@@ -976,7 +984,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
               preload="metadata"
               @error="handleVideoError"
             >
-              您的浏览器不支持视频播放
+              {{ $t('preview.unsupported_video') }}
             </video>
             
             <!-- 视频加载失败时显示的占位符 -->
@@ -984,52 +992,52 @@ function addToQueue({ response, request }: { response: any, request: any }) {
               <div class="text-center text-gray-400">
                 <div class="text-4xl mb-2">📹</div>
                 <p class="text-sm text-white font-medium">
-                  <span v-if="previewData.tunnel[0].includes('/tunnel?')">代理视频预览失败</span>
-                  <span v-else>视频预览不可用</span>
+                  <span v-if="previewData.tunnel[0].includes('/tunnel?')">{{ $t('preview.proxy_video_failed') }}</span>
+                  <span v-else>{{ $t('preview.preview_unavailable') }}</span>
                 </p>
                 <p class="text-xs mt-1 text-gray-300">
-                  <span v-if="previewData.tunnel[0].includes('/tunnel?')">SnapMedia代理可能需要特殊处理</span>
-                  <span v-else>某些平台视频需要直接下载</span>
+                  <span v-if="previewData.tunnel[0].includes('/tunnel?')">{{ $t('preview.proxy_video_unavailable_desc') }}</span>
+                  <span v-else>{{ $t('preview.preview_unavailable_desc') }}</span>
                 </p>
-                <p class="text-xs text-pink-300 mt-2">点击下方按钮直接下载</p>
+                <p class="text-xs text-pink-300 mt-2">{{ $t('preview.download_instead') }}</p>
               </div>
             </div>
             
             <!-- 视频加载中的提示 -->
             <div v-if="!videoError" class="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
               <span v-if="previewData.tunnel[0].includes('/tunnel?')">
-                🔄 通过SnapMedia代理加载...
+                {{ $t('preview.loading_proxy') }}
               </span>
               <span v-else>
-                🎬 视频加载中...
+                {{ $t('preview.loading_video') }}
               </span>
             </div>
           </div>
 
           <!-- 说明文本 -->
           <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
-            <h5 class="text-yellow-400 font-semibold mb-2">📁 文件信息</h5>
+            <h5 class="text-yellow-400 font-semibold mb-2">📁 {{ $t('preview.file_info') }}</h5>
             
             <!-- 合并类型说明 -->
             <div v-if="previewData.type === 'merge'" class="text-gray-300 text-sm mb-3">
-              <p class="mb-2">YouTube视频下载包含两个分离的文件：</p>
+              <p class="mb-2">{{ $t('preview.merge_info') }}</p>
               <ul class="list-disc list-inside ml-2 space-y-1">
-                <li><strong>视频文件</strong>（无音频） - 用于上方预览</li>
-                <li><strong>音频文件</strong>（无视频）</li>
+                <li><strong>{{ $t('preview.video_file') }}</strong>{{ $t('preview.video_file_desc') }}</li>
+                <li><strong>{{ $t('preview.audio_file') }}</strong>{{ $t('preview.audio_file_desc') }}</li>
               </ul>
-              <p class="mt-2 text-yellow-300">您需要使用视频编辑软件将这两个文件合并。</p>
+              <p class="mt-2 text-yellow-300">{{ $t('preview.merge_required') }}</p>
             </div>
             
             <!-- 单文件说明 -->
             <div v-else-if="previewData.type === 'single' || previewData.type === 'redirect'" class="text-gray-300 text-sm mb-3">
-              <p>✅ 检测到单个媒体文件，点击下载即可保存。</p>
-              <p class="text-green-300 text-xs mt-1">这是一个完整的媒体文件，无需额外处理。</p>
+              <p>✅ {{ $t('preview.single_file_detected') }}</p>
+              <p class="text-green-300 text-xs mt-1">{{ $t('preview.single_file_desc') }}</p>
             </div>
             
             <!-- 多文件说明 -->
             <div v-else class="text-gray-300 text-sm mb-3">
-              <p>📦 检测到多个文件，将分别下载。</p>
-              <p class="text-blue-300 text-xs mt-1">文件数量: {{ previewData.tunnel?.length || 0 }}</p>
+              <p>📦 {{ $t('preview.multiple_files_detected') }}</p>
+              <p class="text-blue-300 text-xs mt-1">{{ $t('preview.file_count') }}: {{ previewData.tunnel?.length || 0 }}</p>
             </div>
           </div>
 
@@ -1047,10 +1055,10 @@ function addToQueue({ response, request }: { response: any, request: any }) {
             >
               <Loader2 v-if="isDownloading" class="w-5 h-5 animate-spin" />
               <Download v-else class="w-5 h-5" />
-              <span v-if="isDownloading">正在下载...</span>
-              <span v-else-if="previewData.type === 'merge'">下载分离文件 (视频 + 音频)</span>
-              <span v-else-if="previewData.type === 'single' || previewData.type === 'redirect'">下载文件</span>
-              <span v-else>下载所有文件 ({{ previewData.tunnel?.length || 0 }}个)</span>
+              <span v-if="isDownloading">{{ $t('preview.downloading') }}</span>
+              <span v-else-if="previewData.type === 'merge'">{{ $t('preview.download_separated_files') }}</span>
+              <span v-else-if="previewData.type === 'single' || previewData.type === 'redirect'">{{ $t('preview.download_file') }}</span>
+              <span v-else>{{ $t('preview.download_all_files', { count: previewData.tunnel?.length || 0 }) }}</span>
             </button>
             
             <!-- 新标签页打开按钮（备用选项） -->
@@ -1063,7 +1071,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
                      flex items-center justify-center gap-2 min-w-[160px]"
             >
               <ExternalLink class="w-4 h-4" />
-              <span>新标签页打开</span>
+              <span>{{ $t('preview.open_in_new_tab') }}</span>
             </button>
           </div>
         </div>
@@ -1079,8 +1087,8 @@ function addToQueue({ response, request }: { response: any, request: any }) {
       <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 m-4">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="text-xl font-bold text-white">选择要下载的文件</h3>
-            <p class="text-gray-400 text-sm mt-1">找到 {{ pickerData?.picker?.length || 0 }} 个文件</p>
+            <h3 class="text-xl font-bold text-white">{{ $t('picker.title') }}</h3>
+            <p class="text-gray-400 text-sm mt-1">{{ $t('picker.found_files', { count: pickerData?.picker?.length || 0 }) }}</p>
           </div>
           <button
             @click="closePicker"
@@ -1102,11 +1110,11 @@ function addToQueue({ response, request }: { response: any, request: any }) {
                 class="w-4 h-4 text-pink-500 rounded border-gray-300 focus:ring-pink-500"
               />
               <span class="text-white font-medium">
-                {{ selectedItems.size === pickerData?.picker?.length ? '取消全选' : '全选' }}
+                {{ selectedItems.size === pickerData?.picker?.length ? $t('picker.deselect_all') : $t('picker.select_all') }}
               </span>
             </div>
             <span class="text-gray-400 text-sm">
-              已选择 {{ selectedItems.size }} / {{ pickerData?.picker?.length || 0 }} 个文件
+              {{ $t('picker.selected_files', { selected: selectedItems.size, total: pickerData?.picker?.length || 0 }) }}
             </span>
           </div>
 
@@ -1140,7 +1148,7 @@ function addToQueue({ response, request }: { response: any, request: any }) {
                       <div class="text-3xl mb-2">
                         {{ item.type === 'video' ? '🎥' : '📷' }}
                       </div>
-                      <p class="text-sm">{{ item.type === 'video' ? '视频' : '图片' }}</p>
+                      <p class="text-sm">{{ item.type === 'video' ? $t('picker.video') : $t('picker.image') }}</p>
                     </div>
                   </div>
                   
@@ -1190,8 +1198,8 @@ function addToQueue({ response, request }: { response: any, request: any }) {
             >
               <Loader2 v-if="isPickerDownloading" class="w-5 h-5 animate-spin" />
               <Download v-else class="w-5 h-5" />
-              <span v-if="isPickerDownloading">正在下载...</span>
-              <span v-else>批量下载选中文件 ({{ selectedItems.size }})</span>
+              <span v-if="isPickerDownloading">{{ $t('picker.downloading') }}</span>
+              <span v-else>{{ $t('picker.download_selected', { count: selectedItems.size }) }}</span>
             </button>
           </div>
         </div>

@@ -30,7 +30,7 @@
                 'text-slate-800'
               ]">
             <Settings class="w-6 h-6 mr-3" />
-            设置
+            {{ $t('settings_panel.title') }}
           </h2>
           <button
             @click="closePanel"
@@ -50,12 +50,12 @@
         
         <!-- 下载设置 -->
         <section>
-          <h3 class="section-title">下载设置</h3>
+          <h3 class="section-title">{{ $t('settings_panel.download_settings.title') }}</h3>
           <div class="space-y-6">
             
             <!-- 默认下载模式 -->
             <div>
-              <label class="setting-label">默认下载模式</label>
+              <label class="setting-label">{{ $t('settings_panel.download_settings.default_download_mode') }}</label>
               <div class="flex space-x-2 mt-2">
                 <button
                   v-for="mode in downloadModes"
@@ -75,9 +75,9 @@
             <!-- 视频质量和音频格式 -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="setting-label">默认视频质量</label>
+                <label class="setting-label">{{ $t('settings_panel.download_settings.default_video_quality') }}</label>
                 <select v-model="settings.save.videoQuality" class="glass-select">
-                  <option value="max">最高</option>
+                  <option value="max">{{ $t('download_interface.advanced.video_quality_options.max') }}</option>
                   <option value="2160">4K (2160p)</option>
                   <option value="1440">2K (1440p)</option>
                   <option value="1080">1080p</option>
@@ -88,9 +88,9 @@
               </div>
 
               <div>
-                <label class="setting-label">默认音频格式</label>
+                <label class="setting-label">{{ $t('settings_panel.download_settings.default_audio_format') }}</label>
                 <select v-model="settings.save.audioFormat" class="glass-select">
-                  <option value="best">最佳</option>
+                  <option value="best">{{ $t('download_interface.advanced.audio_format_options.best') }}</option>
                   <option value="mp3">MP3</option>
                   <option value="ogg">OGG</option>
                   <option value="wav">WAV</option>
@@ -101,30 +101,25 @@
 
             <!-- 文件名样式 -->
             <div>
-              <label class="setting-label">文件名样式</label>
+              <label class="setting-label">{{ $t('download_interface.advanced.filename_style') }}</label>
               <select v-model="settings.save.filenameStyle" class="glass-select">
-                <option value="classic">经典 (完整信息)</option>
-                <option value="basic">简洁 (标题_质量)</option>
-                <option value="pretty">美观 (仅标题)</option>
-                <option value="nerdy">技术 (详细信息)</option>
+                <option value="classic">{{ $t('download_interface.advanced.filename_style_options.classic') }}</option>
+                <option value="basic">{{ $t('download_interface.advanced.filename_style_options.basic') }}</option>
+                <option value="pretty">{{ $t('download_interface.advanced.filename_style_options.pretty') }}</option>
+                <option value="nerdy">{{ $t('download_interface.advanced.filename_style_options.nerdy') }}</option>
               </select>
             </div>
 
             <!-- 媒体处理方式 -->
             <div>
-              <label class="setting-label">媒体处理方式</label>
+              <label class="setting-label">{{ $t('settings_panel.download_settings.media_processing_mode') }}</label>
               <select v-model="settings.save.localProcessing" class="glass-select">
-                <option value="auto">智能选择 (推荐)</option>
-                <option value="forced">始终浏览器合并</option>
-                <option value="disabled">始终服务器合并</option>
-                <option value="preferred">智能混合模式</option>
+                <option value="auto">{{ $t('settings_panel.download_settings.media_processing_mode_options.auto') }}</option>
+                <option value="forced">{{ $t('settings_panel.download_settings.media_processing_mode_options.forced') }}</option>
+                <option value="disabled">{{ $t('settings_panel.download_settings.media_processing_mode_options.disabled') }}</option>
+                <option value="preferred">{{ $t('settings_panel.download_settings.media_processing_mode_options.preferred') }}</option>
               </select>
-              <p class="text-sm text-gray-400 mt-1">
-                🎯 <strong>智能选择</strong>：YouTube、Bilibili 用浏览器合并，其他平台用服务器合并<br>
-                🔧 <strong>浏览器合并</strong>：所有平台都在浏览器中合成视频和音频（速度快，占用内存）<br>
-                🌐 <strong>服务器合并</strong>：所有平台都在服务器端合成（节省内存，可能较慢）<br>
-                ⚡ <strong>混合模式</strong>：根据文件类型智能选择处理方式
-              </p>
+              <p class="text-sm text-gray-400 mt-1" v-html="$t('settings_panel.download_settings.media_processing_mode_description_html')"></p>
             </div>
 
             <!-- 下载选项 -->
@@ -136,7 +131,7 @@
                   class="sr-only"
                 />
                 <div class="checkbox-custom"></div>
-                <span>禁用元数据</span>
+                <span>{{ $t('download_interface.advanced.disable_metadata') }}</span>
               </label>
 
               <label class="setting-checkbox">
@@ -146,17 +141,17 @@
                   class="sr-only"
                 />
                 <div class="checkbox-custom"></div>
-                <span>转换GIF为MP4</span>
+                <span>{{ $t('download_interface.advanced.convert_gif_to_mp4') }}</span>
               </label>
 
-              <label class="setting-checkbox" :title="'开启后，所有下载都会通过服务器代理，可以解决某些区域限制问题，但下载速度可能较慢'">
+              <label class="setting-checkbox" :title="$t('settings_panel.download_settings.always_proxy_title')">
                 <input
                   v-model="settings.save.alwaysProxy"
                   type="checkbox"
                   class="sr-only"
                 />
                 <div class="checkbox-custom"></div>
-                <span>总是使用代理 🌐</span>
+                <span>{{ $t('settings_panel.download_settings.always_proxy') }} 🌐</span>
               </label>
 
               <label class="setting-checkbox">
@@ -166,40 +161,44 @@
                   class="sr-only"
                 />
                 <div class="checkbox-custom"></div>
-                <span>YouTube更好音质</span>
+                <span>{{ $t('settings_panel.download_settings.youtube_better_audio') }}</span>
               </label>
             </div>
             
             <!-- 代理设置说明 -->
             <div class="mt-3 p-3 bg-slate-800/50 rounded-lg">
-              <p class="text-xs text-gray-400">
-                💡 <strong>代理设置说明：</strong><br>
-                • 🚀 <strong>直接模式</strong>（默认）：从源站直接下载，速度最快<br>
-                • 🛡️ <strong>代理模式</strong>：通过服务器中转，可绕过防盗链和区域限制，但速度较慢<br>
-                • 📋 <strong>使用场景</strong>：下载失败、区域限制、防盗链阻止时开启代理
-              </p>
+              <p class="text-xs text-gray-400" v-html="$t('settings_panel.download_settings.proxy_description_html')"></p>
             </div>
           </div>
         </section>
 
         <!-- 界面设置 -->
         <section>
-          <h3 class="section-title">界面设置</h3>
+          <h3 class="section-title">{{ $t('settings_panel.interface_settings.title') }}</h3>
           <div class="space-y-6">
             
             <!-- 主题 -->
             <div>
-              <label class="setting-label">主题</label>
+              <label class="setting-label">{{ $t('settings_panel.interface_settings.theme') }}</label>
               <select v-model="settings.appearance.theme" class="glass-select">
-                <option value="dark">深色</option>
-                <option value="light">浅色</option>
-                <option value="auto">跟随系统</option>
+                <option value="dark">{{ $t('settings_panel.interface_settings.theme_options.dark') }}</option>
+                <option value="light">{{ $t('settings_panel.interface_settings.theme_options.light') }}</option>
+                <option value="auto">{{ $t('settings_panel.interface_settings.theme_options.auto') }}</option>
+              </select>
+            </div>
+
+            <!-- 语言切换 -->
+            <div>
+              <label class="setting-label">{{ $t('settings_panel.interface_settings.language') }}</label>
+              <select v-model="$i18n.locale" @change="switchLanguage" class="glass-select">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
               </select>
             </div>
 
             <!-- 霓虹强度 -->
             <div>
-              <label class="setting-label">霓虹效果强度: {{ settings.appearance.neonIntensity }}%</label>
+              <label class="setting-label">{{ $t('settings_panel.interface_settings.neon_intensity') }}: {{ settings.appearance.neonIntensity }}%</label>
               <input
                 v-model.number="settings.appearance.neonIntensity"
                 type="range"
@@ -220,14 +219,14 @@
                 class="sr-only"
               />
               <div class="checkbox-custom"></div>
-              <span>启用动画效果</span>
+              <span>{{ $t('settings_panel.interface_settings.enable_animations') }}</span>
             </label>
           </div>
         </section>
 
         <!-- API设置 -->
         <section>
-          <h3 class="section-title">API设置</h3>
+          <h3 class="section-title">{{ $t('settings_panel.api_settings.title') }}</h3>
           <div class="space-y-6">
             
             <!-- 自定义API -->
@@ -238,12 +237,12 @@
                 class="sr-only"
               />
               <div class="checkbox-custom"></div>
-              <span>使用自定义API服务器</span>
+              <span>{{ $t('settings_panel.api_settings.use_custom_api_server') }}</span>
             </label>
 
             <!-- API服务器地址 -->
             <div v-if="settings.processing.enableCustomInstances">
-              <label class="setting-label">API服务器地址</label>
+              <label class="setting-label">{{ $t('settings_panel.api_settings.api_server_address') }}</label>
               <input
                 v-model="settings.processing.customInstanceURL"
                 type="text"
@@ -251,13 +250,13 @@
                 class="glass-input"
               />
               <p class="text-sm text-gray-400 mt-1">
-                默认: http://localhost:9000/
+                {{ $t('settings_panel.api_settings.default_api_server_address') }}
               </p>
             </div>
 
             <!-- 请求超时 -->
             <div>
-              <label class="setting-label">请求超时 (秒)</label>
+              <label class="setting-label">{{ $t('settings_panel.api_settings.request_timeout') }}</label>
               <input
                 v-model.number="settings.processing.requestTimeout"
                 type="number"
@@ -271,7 +270,7 @@
 
         <!-- 其他设置 -->
         <section>
-          <h3 class="section-title">其他设置</h3>
+          <h3 class="section-title">{{ $t('settings_panel.other_settings.title') }}</h3>
           <div class="space-y-6">
             
             <label class="setting-checkbox">
@@ -281,7 +280,7 @@
                 class="sr-only"
               />
               <div class="checkbox-custom"></div>
-              <span>自动检测剪贴板链接</span>
+              <span>{{ $t('settings_panel.other_settings.auto_detect_clipboard') }}</span>
             </label>
 
             <label class="setting-checkbox">
@@ -291,28 +290,28 @@
                 class="sr-only"
               />
               <div class="checkbox-custom"></div>
-              <span>显示开发者信息</span>
+              <span>{{ $t('settings_panel.other_settings.show_dev_info') }}</span>
             </label>
           </div>
         </section>
 
         <!-- 操作按钮 -->
         <section>
-          <h3 class="section-title">数据管理</h3>
+          <h3 class="section-title">{{ $t('settings_panel.data_management.title') }}</h3>
           <div class="flex flex-wrap gap-3">
             <button @click="exportSettings" class="glass-btn glass-btn-secondary">
               <Download class="w-5 h-5" />
-              <span>导出设置</span>
+              <span>{{ $t('settings_panel.data_management.export_settings') }}</span>
             </button>
             
             <button @click="importSettings" class="glass-btn glass-btn-secondary">
               <Upload class="w-5 h-5" />
-              <span>导入设置</span>
+              <span>{{ $t('settings_panel.data_management.import_settings') }}</span>
             </button>
             
             <button @click="resetToDefaults" class="glass-btn text-pink-400 border-pink-500/30 hover:bg-pink-500/10">
               <RotateCcw class="w-5 h-5" />
-              <span>重置设置</span>
+              <span>{{ $t('settings_panel.data_management.reset_settings') }}</span>
             </button>
           </div>
         </section>
@@ -338,6 +337,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { 
   Settings, 
   X, 
@@ -351,7 +351,7 @@ import {
   Music,
   VolumeX
 } from 'lucide-vue-next'
-
+import { useRouter } from 'vue-router'
 import { settings, saveStatus, resetSettings } from '@/stores/settings'
 
 // Props
@@ -366,12 +366,15 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
+const router = useRouter()
+
 // 下载模式配置
-const downloadModes = [
-  { value: 'auto' as const, label: '自动', icon: Sparkles },
-  { value: 'audio' as const, label: '音频', icon: Music },
-  { value: 'mute' as const, label: '静音', icon: VolumeX }
-]
+const downloadModes = computed(() => [
+  { value: 'auto' as const, label: t('download_interface.download_modes.auto'), icon: Sparkles },
+  { value: 'audio' as const, label: t('download_interface.download_modes.audio'), icon: Music },
+  { value: 'mute' as const, label: t('download_interface.download_modes.mute'), icon: VolumeX }
+])
 
 // 计算属性
 const statusIcon = computed(() => {
@@ -385,9 +388,9 @@ const statusIcon = computed(() => {
 
 const statusText = computed(() => {
   switch (saveStatus.value) {
-    case 'saving': return '保存中...'
-    case 'saved': return '已保存'
-    case 'error': return '保存失败'
+    case 'saving': return t('settings_panel.status.saving')
+    case 'saved': return t('settings_panel.status.saved')
+    case 'error': return t('settings_panel.status.error')
     default: return ''
   }
 })
@@ -395,6 +398,12 @@ const statusText = computed(() => {
 // 方法
 const closePanel = () => {
   emit('close')
+}
+
+const switchLanguage = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const locale = target.value
+  router.push({ name: router.currentRoute.value.name as string, params: { locale } })
 }
 
 const updateSliderProgress = (event: Event) => {
@@ -436,7 +445,7 @@ const importSettings = () => {
         Object.assign(settings, importedSettings)
       } catch (error) {
         console.error('导入设置失败:', error)
-        alert('导入失败：文件格式不正确')
+        alert(t('settings_panel.data_management.import_error'))
       }
     }
     reader.readAsText(file)
@@ -446,7 +455,7 @@ const importSettings = () => {
 }
 
 const resetToDefaults = () => {
-  if (confirm('确定要重置所有设置吗？这将清除所有自定义配置。')) {
+  if (confirm(t('settings_panel.data_management.reset_confirm'))) {
     resetSettings()
   }
 }

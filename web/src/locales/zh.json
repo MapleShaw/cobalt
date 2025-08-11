@@ -1,0 +1,267 @@
+{
+  "seo": {
+    "title": "SnapMedia - 跨平台媒体下载工具 | 支持YouTube、TikTok、Instagram等15+平台",
+    "description": "SnapMedia是一款免费的跨平台媒体下载工具，支持YouTube、TikTok、Instagram、Twitter、Bilibili等15+热门平台的视频、音频下载。快速、安全、无水印。"
+  },
+  "header": {
+    "title": "跨平台媒体下载工具",
+    "subtitle": "一键获取你喜爱的内容",
+    "subtitle_highlight": "快速 • 安全 • 多平台支持"
+  },
+  "settings": "设置",
+  "supported_platforms": "支持的平台",
+  "footer": {
+    "tagline": "Media in a Snap!",
+    "built_with_pre": "基于开源项目 ",
+    "built_with_post": " 构建"
+  },
+  "queue": {
+    "title": "处理队列",
+    "clear": "清除",
+    "source": "来源：{service}",
+    "unknown_platform": "未知平台",
+    "media_file": "{service} 媒体文件",
+    "analyzing_link": "正在分析链接...",
+    "detected_separate_streams": "检测到{service}分离流，准备前端合并...",
+    "stream_url_fetch_failed": "音视频流URL获取失败",
+    "downloading_video_stream": "正在下载视频流...",
+    "downloading_audio_stream": "正在下载音频流...",
+    "stream_download_failed": "音视频流下载失败 - Video: {video_status}, Audio: {audio_status}",
+    "processing_video_data": "正在处理视频数据...",
+    "processing_audio_data": "正在处理音频数据...",
+    "data_processing_complete": "数据处理完成，准备合并...",
+    "initializing_video_engine": "正在初始化视频处理引擎...",
+    "merge_complete_preparing_download": "合并完成，准备下载...",
+    "starting_download": "正在启动下载...",
+    "download_complete": "下载完成！",
+    "merge_failed_downloading_separately": "合并失败，正在分别下载视频和音频...",
+    "downloading_video_file": "正在下载视频文件...",
+    "downloading_audio_file": "正在下载音频文件...",
+    "downloaded_separately": "已分别下载视频和音频文件",
+    "stream_download_failed_error": "下载失败：无法获取音视频文件",
+    "downloading_multiple_files": "正在下载多个文件...",
+    "downloading_file_number": "正在下载第 {index}/{total} 个文件...",
+    "download_stream_failed": "下载流 {index} 失败",
+    "all_files_downloaded": "所有文件下载完成！",
+    "downloading_file": "正在下载文件...",
+    "file_download_failed": "文件下载失败",
+    "processing_file_data": "正在处理文件数据...",
+    "no_downloadable_links": "无可用下载链接",
+    "processing_failed": "处理失败：",
+    "unknown_error": "未知错误",
+    "waiting_for_processing": "等待处理..."
+  },
+  "preview": {
+    "title": "视频预览",
+    "unknown_title": "未知标题",
+    "unknown_author": "未知作者",
+    "quality": "质量",
+    "unknown": "未知",
+    "format": "格式",
+    "unsupported_video": "您的浏览器不支持视频播放",
+    "proxy_video_failed": "代理视频预览失败",
+    "preview_unavailable": "视频预览不可用",
+    "proxy_video_unavailable_desc": "SnapMedia代理可能需要特殊处理",
+    "preview_unavailable_desc": "某些平台视频需要直接下载",
+    "download_instead": "点击下方按钮直接下载",
+    "loading_proxy": "🔄 通过SnapMedia代理加载...",
+    "loading_video": "🎬 视频加载中...",
+    "file_info": "文件信息",
+    "merge_info": "YouTube视频下载包含两个分离的文件：",
+    "video_file": "视频文件",
+    "video_file_desc": "（无音频） - 用于上方预览",
+    "audio_file": "音频文件",
+    "audio_file_desc": "（无视频）",
+    "merge_required": "您需要使用视频编辑软件将这两个文件合并。",
+    "single_file_detected": "检测到单个媒体文件，点击下载即可保存。",
+    "single_file_desc": "这是一个完整的媒体文件，无需额外处理。",
+    "multiple_files_detected": "检测到多个文件，将分别下载。",
+    "file_count": "文件数量",
+    "downloading": "正在下载...",
+    "download_separated_files": "下载分离文件 (视频 + 音频)",
+    "download_file": "下载文件",
+    "download_all_files": "下载所有文件 ({count}个)",
+    "open_in_new_tab": "新标签页打开"
+  },
+  "picker": {
+    "title": "选择要下载的文件",
+    "found_files": "找到 {count} 个文件",
+    "select_all": "全选",
+    "deselect_all": "取消全选",
+    "selected_files": "已选择 {selected} / {total} 个文件",
+    "video": "视频",
+    "image": "图片",
+    "downloading": "正在下载...",
+    "download_selected": "批量下载选中文件 ({count})"
+  },
+  "toast": {
+    "download_preparing": "正在准备下载...",
+    "no_downloadable_links": "没有找到可下载的链接",
+    "download_started_multiple": "✅ 下载已启动，共 {count} 个文件",
+    "download_error_unknown": "下载过程中发生未知错误",
+    "opened_in_new_tab": "已在新标签页打开视频",
+    "batch_download_started": "开始批量下载，共{count}个文件",
+    "download_failed": "下载失败",
+    "download_file_failed": "下载文件 {index} 失败: {message}",
+    "batch_download_all_started": "✅ 批量下载任务已全部启动",
+    "download_failed_with_message": "下载失败: {message}",
+    "browser_downloading_streams": "🚀 浏览器智能处理：正在下载音视频流...",
+    "browser_parsing_streams": "📦 浏览器智能处理：正在解析音视频数据...",
+    "browser_merging_streams": "🎬 浏览器智能合并：正在处理{service}音视频...",
+    "initializing_video_engine": "正在初始化视频处理引擎...",
+    "browser_merge_complete": "✨ 浏览器合并完成！准备下载...",
+    "browser_merge_failed_downloading_separately": "⚠️ 浏览器合并失败，将分别下载视频和音频",
+    "downloaded_separately": "✅ 已分别下载视频和音频文件",
+    "stream_download_failed_error": "❌ 音视频文件下载失败",
+    "queue_processing_failed": "队列处理失败"
+  },
+  "download_interface": {
+    "paste_link_placeholder": "粘贴视频链接...",
+    "download_button": {
+      "processing": "处理中...",
+      "enter_link": "请输入链接",
+      "invalid_link": "链接无效",
+      "ready_to_download": "准备下载",
+      "start_download": "开始下载"
+    },
+    "download_modes": {
+      "auto": "自动",
+      "audio": "音频",
+      "mute": "静音"
+    },
+    "advanced_settings": "高级设置",
+    "advanced": {
+      "video_quality": "视频质量",
+      "video_quality_options": {
+        "max": "最高"
+      },
+      "audio_format": "音频格式",
+      "audio_format_options": {
+        "best": "最佳"
+      },
+      "filename_style": "文件名样式",
+      "filename_style_options": {
+        "classic": "经典 (完整信息)",
+        "basic": "简洁 (标题_质量)",
+        "pretty": "美观 (仅标题)",
+        "nerdy": "技术 (详细信息)"
+      },
+      "disable_metadata": "禁用元数据",
+      "convert_gif_to_mp4": "转换GIF为MP4"
+    },
+    "toast": {
+      "processing_request": "正在处理请求...",
+      "api_no_response": "API服务器无响应",
+      "added_to_queue": "已添加到处理队列，正在准备下载...",
+      "redirect_detected": "检测到直接链接，显示预览",
+      "tunnel_detected": "检测到单文件下载，显示预览",
+      "picker_detected": "发现多个文件，请选择下载",
+      "generic_success": "检测到媒体文件，显示预览"
+    },
+    "error_messages": {
+      "link_invalid": "链接无效或不支持",
+      "link_unsupported": "不支持的平台",
+      "content_too_long": "视频时长超过限制",
+      "content_unavailable": "内容不可用或已被删除",
+      "rate_limit": "请求过于频繁，请稍后再试",
+      "api_fetch_timeout": "请求超时，请检查网络连接",
+      "api_fetch_error": "网络错误，请稍后再试",
+      "api_fetch_fail": "该平台暂时被阻止访问，请稍后再试",
+      "api_fetch_status": "API服务器错误",
+      "error_api_header_accept": "API请求格式错误",
+      "error_api_fetch_short_link": "Facebook短链接暂不支持，请使用完整的Facebook链接",
+      "unknown_error": "API错误: {code} - {context}",
+      "unknown_error_context": "获取视频信息失败，请检查链接是否正确",
+      "unknown_response_format": "未知的响应格式: {response}",
+      "download_failed_retry": "下载失败，请重试"
+    }
+  },
+  "settings_panel": {
+    "title": "设置",
+    "download_settings": {
+      "title": "下载设置",
+      "default_download_mode": "默认下载模式",
+      "default_video_quality": "默认视频质量",
+      "default_audio_format": "默认音频格式",
+      "media_processing_mode": "媒体处理方式",
+      "media_processing_mode_options": {
+        "auto": "智能选择 (推荐)",
+        "forced": "始终浏览器合并",
+        "disabled": "始终服务器合并",
+        "preferred": "智能混合模式"
+      },
+      "media_processing_mode_description_html": "🎯 <strong>智能选择</strong>：YouTube、Bilibili 用浏览器合并，其他平台用服务器合并<br>🔧 <strong>浏览器合并</strong>：所有平台都在浏览器中合成视频和音频（速度快，占用内存）<br>🌐 <strong>服务器合并</strong>：所有平台都在服务器端合成（节省内存，可能较慢）<br>⚡ <strong>混合模式</strong>：根据文件类型智能选择处理方式",
+      "always_proxy": "总是使用代理",
+      "always_proxy_title": "开启后，所有下载都会通过服务器代理，可以解决某些区域限制问题，但下载速度可能较慢",
+      "youtube_better_audio": "YouTube更好音质",
+      "proxy_description_html": "💡 <strong>代理设置说明：</strong><br>• 🚀 <strong>直接模式</strong>（默认）：从源站直接下载，速度最快<br>• 🛡️ <strong>代理模式</strong>：通过服务器中转，可绕过防盗链和区域限制，但速度较慢<br>• 📋 <strong>使用场景</strong>：下载失败、区域限制、防盗链阻止时开启代理"
+    },
+    "interface_settings": {
+      "title": "界面设置",
+      "theme": "主题",
+      "theme_options": {
+        "dark": "深色",
+        "light": "浅色",
+        "auto": "跟随系统"
+      },
+      "language": "语言",
+      "neon_intensity": "霓虹效果强度",
+      "enable_animations": "启用动画效果"
+    },
+    "api_settings": {
+      "title": "API设置",
+      "use_custom_api_server": "使用自定义API服务器",
+      "api_server_address": "API服务器地址",
+      "default_api_server_address": "默认: http://localhost:9000/",
+      "request_timeout": "请求超时 (秒)"
+    },
+    "other_settings": {
+      "title": "其他设置",
+      "auto_detect_clipboard": "自动检测剪贴板链接",
+      "show_dev_info": "显示开发者信息"
+    },
+    "data_management": {
+      "title": "数据管理",
+      "export_settings": "导出设置",
+      "import_settings": "导入设置",
+      "reset_settings": "重置设置",
+      "import_error": "导入失败：文件格式不正确",
+      "reset_confirm": "确定要重置所有设置吗？这将清除所有自定义配置。"
+    },
+    "status": {
+      "saving": "保存中...",
+      "saved": "已保存",
+      "error": "保存失败"
+    }
+  },
+  "hello_world": {
+    "message_1": "你已经成功创建了一个项目",
+    "message_2": "接下来做什么？"
+  },
+  "welcome": {
+    "documentation": {
+      "heading": "文档",
+      "body_html": "Vue 的 <a href=\"https://cn.vuejs.org/\" target=\"_blank\" rel=\"noopener\">官方文档</a> 为您提供了入门所需的所有信息。"
+    },
+    "tooling": {
+      "heading": "工具",
+      "body_html_1": "本项目使用 <a href=\"https://vitejs.dev/guide/features.html\" target=\"_blank\" rel=\"noopener\">Vite</a> 提供服务和打包。推荐的 IDE 设置是 <a href=\"https://code.visualstudio.com/\" target=\"_blank\" rel=\"noopener\">VSCode</a> + <a href=\"https://github.com/vuejs/language-tools\" target=\"_blank\" rel=\"noopener\">Vue - Official</a>。如果您需要测试组件和网页，请查看 <a href=\"https://vitest.dev/\" target=\"_blank\" rel=\"noopener\">Vitest</a> 和 <a href=\"https://www.cypress.io/\" target=\"_blank\" rel=\"noopener\">Cypress</a> / <a href=\"https://playwright.dev/\" target=\"_blank\" rel=\"noopener\">Playwright</a>。",
+      "body_html_2": "更多说明请参见 <code>README.md</code>。"
+    },
+    "ecosystem": {
+      "heading": "生态系统",
+      "body_html": "为您的项目获取官方工具和库：<a href=\"https://pinia.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Pinia</a>、<a href=\"https://router.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Vue Router</a>、<a href=\"https://test-utils.vuejs.org/\" target=\"_blank\" rel=\"noopener\">Vue Test Utils</a> 和 <a href=\"https://github.com/vuejs/devtools\" target=\"_blank\" rel=\"noopener\">Vue Dev Tools</a>。如果您需要更多资源，我们建议您访问 <a href=\"https://github.com/vuejs/awesome-vue\" target=\"_blank\" rel=\"noopener\">Awesome Vue</a>。"
+    },
+    "community": {
+      "heading": "社区",
+      "body_html": "遇到困难了？在 <a href=\"https://chat.vuejs.org\" target=\"_blank\" rel=\"noopener\">Vue Land</a>（我们的官方 Discord 服务器）或 <a href=\"https://stackoverflow.com/questions/tagged/vue.js\" target=\"_blank\" rel=\"noopener\">StackOverflow</a> 上提问。您还应该关注官方的 <a href=\"https://bsky.app/profile/vuejs.org\" target=\"_blank\" rel=\"noopener\">@vuejs.org</a> Bluesky 帐户或 <a href=\"https://x.com/vuejs\" target=\"_blank\" rel=\"noopener\">@vuejs</a> X 帐户以获取 Vue 世界的最新消息。"
+    },
+    "support": {
+      "heading": "支持 Vue",
+      "body_html": "作为一个独立的项目，Vue 依靠社区的支持来维持其可持续性。您可以通过<a href=\"https://vuejs.org/sponsor/\" target=\"_blank\" rel=\"noopener\">成为赞助商</a>来帮助我们。"
+    }
+  },
+  "about": {
+    "title": "这是一个关于页面"
+  }
+}

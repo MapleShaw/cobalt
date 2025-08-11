@@ -13,7 +13,7 @@
             @keydown.enter="handleDownload"
             :disabled="isProcessing"
             type="text"
-            placeholder="粘贴视频链接..."
+            :placeholder="$t('download_interface.paste_link_placeholder')"
             class="glass-input w-full"
             :class="{
               'border-pink-500/50 bg-pink-500/10': urlStatus === 'invalid' && urlInput.length > 0,
@@ -103,7 +103,7 @@
         :disabled="isProcessing"
       >
         <Settings class="w-4 h-4 sm:w-5 sm:h-5" />
-        <span class="text-sm sm:text-base">高级设置</span>
+        <span class="text-sm sm:text-base">{{ $t('download_interface.advanced_settings') }}</span>
         <ChevronDown
           class="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200"
           :class="{ 'rotate-180': showAdvanced }"
@@ -119,9 +119,9 @@
       <!-- 视频质量 -->
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="setting-label">视频质量</label>
+          <label class="setting-label">{{ $t('download_interface.advanced.video_quality') }}</label>
           <select v-model="settings.save.videoQuality" class="glass-select">
-            <option value="max">最高</option>
+            <option value="max">{{ $t('download_interface.advanced.video_quality_options.max') }}</option>
             <option value="2160">4K (2160p)</option>
             <option value="1440">2K (1440p)</option>
             <option value="1080">1080p</option>
@@ -132,9 +132,9 @@
         </div>
 
         <div>
-          <label class="setting-label">音频格式</label>
+          <label class="setting-label">{{ $t('download_interface.advanced.audio_format') }}</label>
           <select v-model="settings.save.audioFormat" class="glass-select">
-            <option value="best">最佳</option>
+            <option value="best">{{ $t('download_interface.advanced.audio_format_options.best') }}</option>
             <option value="mp3">MP3</option>
             <option value="ogg">OGG</option>
             <option value="wav">WAV</option>
@@ -145,12 +145,12 @@
 
       <!-- 文件名样式 -->
       <div>
-        <label class="setting-label">文件名样式</label>
+        <label class="setting-label">{{ $t('download_interface.advanced.filename_style') }}</label>
         <select v-model="settings.save.filenameStyle" class="glass-select">
-          <option value="classic">经典 (完整信息)</option>
-          <option value="basic">简洁 (标题_质量)</option>
-          <option value="pretty">美观 (仅标题)</option>
-          <option value="nerdy">技术 (详细信息)</option>
+          <option value="classic">{{ $t('download_interface.advanced.filename_style_options.classic') }}</option>
+          <option value="basic">{{ $t('download_interface.advanced.filename_style_options.basic') }}</option>
+          <option value="pretty">{{ $t('download_interface.advanced.filename_style_options.pretty') }}</option>
+          <option value="nerdy">{{ $t('download_interface.advanced.filename_style_options.nerdy') }}</option>
         </select>
       </div>
 
@@ -163,7 +163,7 @@
             class="sr-only"
           />
           <div class="checkbox-custom"></div>
-          <span>禁用元数据</span>
+          <span>{{ $t('download_interface.advanced.disable_metadata') }}</span>
         </label>
 
         <label class="setting-checkbox">
@@ -173,7 +173,7 @@
             class="sr-only"
           />
           <div class="checkbox-custom"></div>
-          <span>转换GIF为MP4</span>
+          <span>{{ $t('download_interface.advanced.convert_gif_to_mp4') }}</span>
         </label>
       </div>
     </div>
@@ -186,6 +186,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { 
   Download, 
   Music, 
@@ -205,11 +206,12 @@ import { settings, loadSettings, getCurrentApiURL } from '@/stores/settings'
 import type { CobaltApiRequest, CobaltResponse } from '@/types'
 
 // 下载模式配置
-const downloadModes = [
-  { value: 'auto' as const, label: '自动', icon: Sparkles },
-  { value: 'audio' as const, label: '音频', icon: Music },
-  { value: 'mute' as const, label: '静音', icon: VolumeX }
-]
+const { t } = useI18n()
+const downloadModes = computed(() => [
+  { value: 'auto' as const, label: t('download_interface.download_modes.auto'), icon: Sparkles },
+  { value: 'audio' as const, label: t('download_interface.download_modes.audio'), icon: Music },
+  { value: 'mute' as const, label: t('download_interface.download_modes.mute'), icon: VolumeX }
+])
 
 // 响应式状态
 const urlInput = ref('')
@@ -238,13 +240,13 @@ const downloadButtonIcon = computed(() => {
 })
 
 const downloadButtonText = computed(() => {
-  if (isProcessing.value) return '处理中...'
+  if (isProcessing.value) return t('download_interface.download_button.processing')
   if (!canDownload.value) {
-    if (urlInput.value.length === 0) return '请输入链接'
-    if (urlStatus.value === 'invalid') return '链接无效'
-    return '准备下载'
+    if (urlInput.value.length === 0) return t('download_interface.download_button.enter_link')
+    if (urlStatus.value === 'invalid') return t('download_interface.download_button.invalid_link')
+    return t('download_interface.download_button.ready_to_download')
   }
-  return '开始下载'
+  return t('download_interface.download_button.start_download')
 })
 
 // 方法
@@ -374,7 +376,7 @@ const handleDownload = async () => {
   if (!canDownload.value) return
 
   isProcessing.value = true
-  emit('showToast', '正在处理请求...', 'info')
+  emit('showToast', t('download_interface.toast.processing_request'), 'info')
 
   try {
     // 调试settings状态
@@ -436,7 +438,7 @@ const handleDownload = async () => {
     const response = await api.request(requestData)
 
     if (!response) {
-      throw new Error('API服务器无响应')
+      throw new Error(t('download_interface.toast.api_no_response'))
     }
 
     console.log('收到API响应:', response)
@@ -483,10 +485,10 @@ const handleDownload = async () => {
         emit('add-to-queue', { response, request: {} });
       }
       
-      emit('showToast', '已添加到处理队列，正在准备下载...', 'info');
+      emit('showToast', t('download_interface.toast.added_to_queue'), 'info');
       console.log('✅ [DownloadInterface] add-to-queue事件已发送');
     } else if (response.status === 'redirect' && response.url) {
-      emit('showToast', '检测到直接链接，显示预览', 'info')
+      emit('showToast', t('download_interface.toast.redirect_detected'), 'info')
       
       // 将redirect响应转换为预览格式
       const previewResponse = {
@@ -509,7 +511,7 @@ const handleDownload = async () => {
       })
       
     } else if (response.status === 'tunnel' && response.url) {
-      emit('showToast', '检测到单文件下载，显示预览', 'info')
+      emit('showToast', t('download_interface.toast.tunnel_detected'), 'info')
       
       // 将tunnel响应转换为预览格式
       const previewResponse = {
@@ -533,7 +535,7 @@ const handleDownload = async () => {
       })
       
     } else if (response.status === 'picker' && response.picker) {
-      emit('showToast', '发现多个文件，请选择下载', 'info')
+      emit('showToast', t('download_interface.toast.picker_detected'), 'info')
       
       // 显示picker选择界面
       showPickerSelection(response)
@@ -542,20 +544,20 @@ const handleDownload = async () => {
       console.error('API返回错误:', response.error)
       
       const errorMessages: Record<string, string> = {
-        'link.invalid': '链接无效或不支持',
-        'link.unsupported': '不支持的平台',
-        'content.too_long': '视频时长超过限制',
-        'content.unavailable': '内容不可用或已被删除',
-        'rate_limit': '请求过于频繁，请稍后再试',
-        'api.fetch.timeout': '请求超时，请检查网络连接',
-        'api.fetch.error': '网络错误，请稍后再试',
-        'api.fetch.fail': '该平台暂时被阻止访问，请稍后再试',
-        'api.fetch.status': 'API服务器错误',
-        'error.api.header.accept': 'API请求格式错误',
-        'error.api.fetch.short_link': 'Facebook短链接暂不支持，请使用完整的Facebook链接'
+        'link.invalid': t('download_interface.error_messages.link_invalid'),
+        'link.unsupported': t('download_interface.error_messages.link_unsupported'),
+        'content.too_long': t('download_interface.error_messages.content_too_long'),
+        'content.unavailable': t('download_interface.error_messages.content_unavailable'),
+        'rate_limit': t('download_interface.error_messages.rate_limit'),
+        'api.fetch.timeout': t('download_interface.error_messages.api_fetch_timeout'),
+        'api.fetch.error': t('download_interface.error_messages.api_fetch_error'),
+        'api.fetch.fail': t('download_interface.error_messages.api_fetch_fail'),
+        'api.fetch.status': t('download_interface.error_messages.api_fetch_status'),
+        'error.api.header.accept': t('download_interface.error_messages.error_api_header_accept'),
+        'error.api.fetch.short_link': t('download_interface.error_messages.error_api_fetch_short_link')
       }
       
-      const errorMessage = errorMessages[response.error.code] || `API错误: ${response.error.code || 'unknown'} - ${response.error.context || '获取视频信息失败，请检查链接是否正确'}`
+      const errorMessage = errorMessages[response.error.code] || t('download_interface.error_messages.unknown_error', { code: response.error.code || 'unknown', context: response.error.context || t('download_interface.error_messages.unknown_error_context') })
       throw new Error(errorMessage)
     } else {
       // 🔍 通用处理逻辑 - 尝试从任何可能的字段中提取下载URL
@@ -585,7 +587,7 @@ const handleDownload = async () => {
       if (extractedUrls.length > 0) {
         console.log('✅ 通用解析成功，提取到URL:', extractedUrls)
         
-        emit('showToast', '检测到媒体文件，显示预览', 'info')
+        emit('showToast', t('download_interface.toast.generic_success'), 'info')
         
         const previewResponse = {
           ...response,
@@ -606,7 +608,7 @@ const handleDownload = async () => {
           responseType: response.status
         })
       } else {
-        throw new Error(`未知的响应格式: ${JSON.stringify(response)}`)
+        throw new Error(t('download_interface.error_messages.unknown_response_format', { response: JSON.stringify(response) }))
       }
     }
 
@@ -622,7 +624,7 @@ const handleDownload = async () => {
       })
     }
     
-    const errorMessage = error instanceof Error ? error.message : '下载失败，请重试'
+    const errorMessage = error instanceof Error ? error.message : t('download_interface.error_messages.download_failed_retry')
     emit('showToast', errorMessage, 'error')
   } finally {
     isProcessing.value = false
